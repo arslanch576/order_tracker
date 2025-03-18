@@ -1,5 +1,9 @@
+import 'package:objectbox/objectbox.dart';
+
+@Entity()
 class Product{
-  int id;
+  @Id()
+  int id=0;
   String name;
   int price;
   String size;
