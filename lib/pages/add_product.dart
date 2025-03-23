@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:order_tracker/main.dart';
 
 import '../models/product.dart';
 
@@ -37,7 +38,7 @@ class _AddProductState extends State<AddProduct> {
     }
 
     Product product = Product(0,name, int.parse(price), "Regular", "Burgers", "image");
-    // TODO: save product to database
+    objectBoxDatabase.productBox.put(product);
   }
 
   @override

@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:order_tracker/database/objectbox_database.dart';
 import 'package:order_tracker/pages/home.dart';
 
-void main() {
+late ObjectBoxDatabase objectBoxDatabase;
+
+Future<void> main() async {
+  try {
+    objectBoxDatabase = await ObjectBoxDatabase.create();
+  }catch (e){
+    print(e.toString());
+  }
   runApp(MyApp());
 }
 
