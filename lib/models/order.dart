@@ -1,17 +1,22 @@
+import 'package:objectbox/objectbox.dart';
+import 'package:order_tracker/models/order_item.dart';
 import 'package:order_tracker/models/product.dart';
 
+@Entity()
 class Order {
+  @Id()
   int id;
   String status;
   String customerName;
   String customerContact;
-  List<Product> products;
 
-  Order(this.id, this.status, this.customerName, this.customerContact,
-      this.products);
+  @Backlink('order')
+  ToMany<OrderItem> orderItems=ToMany<OrderItem>();
+
+  Order(this.id, this.status, this.customerName, this.customerContact);
   
   int getTotal(){
-    return products.fold<int>(0, (previousValue, element) => previousValue+element.price);
+    return orderItems.fold<int>(0, (previousValue, element) => previousValue+element.price);
   }
 
 }

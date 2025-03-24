@@ -19,7 +19,7 @@ class OrderWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Order id:845${order.id} | ${order.products.length} Item's",
+              "Order id:845${order.id} | ${order.orderItems.length} Item's",
               style: TextStyle(color: Colors.grey, fontSize: 10),
             ),
             Text(

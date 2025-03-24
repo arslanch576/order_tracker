@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
         itemCount: 10,
         itemBuilder: (context, index) {
           return OrderWidget(
-              Order(0, "Completed", "Arslan", "030012345678", []));
+              Order(0, "Completed", "Arslan", "030012345678"));
         },
       ),
     );

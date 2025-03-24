@@ -16,7 +16,7 @@ class ObjectBoxDatabase{
   static Future<ObjectBoxDatabase> create() async {
     if(objectBoxDatabase!=null) return objectBoxDatabase!;
     final docsDir = await getApplicationDocumentsDirectory();
-    Store store=await openStore(directory: p.join(docsDir.path,"order_db_v1"));
+    Store store=await openStore(directory: p.join(docsDir.path,"order_db_v3"));
     objectBoxDatabase= ObjectBoxDatabase(store);
     return objectBoxDatabase!;
   }

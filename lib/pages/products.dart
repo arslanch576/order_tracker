@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:order_tracker/main.dart';
 import 'package:order_tracker/models/product.dart';
+import 'package:order_tracker/objectbox.g.dart';
 import 'package:order_tracker/pages/add_product.dart';
 import 'package:order_tracker/widgets/product_widget.dart';
 
-class ProductsPage extends StatelessWidget {
+class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
 
+  @override
+  State<ProductsPage> createState() => _ProductsPageState();
+}
+
+class _ProductsPageState extends State<ProductsPage> {
+  var items=objectBoxDatabase.productBox.query().watch(triggerImmediately: true);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,14 +26,18 @@ class ProductsPage extends StatelessWidget {
         )),
         child: Icon(Icons.add),
       ),
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return ProductWidget(
-              product: Product(
-                  0, "Zinger burger", 320, "Regular", "Burgers", "image"));
-        },
-      ),
+      body: StreamBuilder(stream: items, builder: (context, snapshot) {
+        if(!snapshot.hasData) return Center(child: CircularProgressIndicator(),);
+
+        var products=snapshot.data!.find();
+        return ListView.builder(
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            return ProductWidget(
+                product: products[index]);
+          },
+        );
+      },)
     );
   }
 }

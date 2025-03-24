@@ -5,6 +5,7 @@ import 'package:order_tracker/pages/home.dart';
 late ObjectBoxDatabase objectBoxDatabase;
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   try {
     objectBoxDatabase = await ObjectBoxDatabase.create();
   }catch (e){

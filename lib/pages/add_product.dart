@@ -39,6 +39,8 @@ class _AddProductState extends State<AddProduct> {
 
     Product product = Product(0,name, int.parse(price), "Regular", "Burgers", "image");
     objectBoxDatabase.productBox.put(product);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product saved")));
+    Navigator.of(context).pop();
   }
 
   @override
