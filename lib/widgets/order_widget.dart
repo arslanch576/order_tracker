@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:order_tracker/models/order.dart';
+import 'package:order_tracker/models/product_order.dart';
 
 class OrderWidget extends StatelessWidget {
-  Order order;
+  ProductOrder order;
 
   OrderWidget(this.order);
 

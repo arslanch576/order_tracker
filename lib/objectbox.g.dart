@@ -14,7 +14,9 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'models/order_item.dart';
 import 'models/product.dart';
+import 'models/product_order.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -57,7 +59,80 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[])
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(2, 4776952950019088891),
+      name: 'OrderItem',
+      lastPropertyId: const obx_int.IdUid(6, 5588386441855497874),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 3856492699875631792),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 1657361306181674346),
+            name: 'orderId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(1, 8537041239604181203),
+            relationTarget: 'ProductOrder'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 511681790319170257),
+            name: 'productId',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 1878026907179102898),
+            name: 'qty',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 7055723553385492284),
+            name: 'price',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 5588386441855497874),
+            name: 'productName',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(3, 7370653352271473756),
+      name: 'ProductOrder',
+      lastPropertyId: const obx_int.IdUid(4, 2727038881326554175),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 5555044973357186739),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 8866396211287913659),
+            name: 'status',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 8967070820697213956),
+            name: 'customerName',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 2727038881326554175),
+            name: 'customerContact',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[
+        obx_int.ModelBacklink(
+            name: 'orderItems', srcEntity: 'OrderItem', srcField: 'order')
+      ])
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -95,8 +170,8 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(1, 51015842298173998),
-      lastIndexId: const obx_int.IdUid(0, 0),
+      lastEntityId: const obx_int.IdUid(3, 7370653352271473756),
+      lastIndexId: const obx_int.IdUid(1, 8537041239604181203),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
@@ -150,6 +225,90 @@ obx_int.ModelDefinition getObjectBoxModel() {
               categoryParam, imageParam);
 
           return object;
+        }),
+    OrderItem: obx_int.EntityDefinition<OrderItem>(
+        model: _entities[1],
+        toOneRelations: (OrderItem object) => [object.order],
+        toManyRelations: (OrderItem object) => {},
+        getId: (OrderItem object) => object.id,
+        setId: (OrderItem object, int id) {
+          object.id = id;
+        },
+        objectToFB: (OrderItem object, fb.Builder fbb) {
+          final productNameOffset = fbb.writeString(object.productName);
+          fbb.startTable(7);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(1, object.order.targetId);
+          fbb.addInt64(2, object.productId);
+          fbb.addInt64(3, object.qty);
+          fbb.addInt64(4, object.price);
+          fbb.addOffset(5, productNameOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final productIdParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          final qtyParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          final priceParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          final productNameParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 14, '');
+          final object = OrderItem(
+              productIdParam, qtyParam, priceParam, productNameParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          object.order.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
+          object.order.attach(store);
+          return object;
+        }),
+    ProductOrder: obx_int.EntityDefinition<ProductOrder>(
+        model: _entities[2],
+        toOneRelations: (ProductOrder object) => [],
+        toManyRelations: (ProductOrder object) => {
+              obx_int.RelInfo<OrderItem>.toOneBacklink(
+                      2, object.id, (OrderItem srcObject) => srcObject.order):
+                  object.orderItems
+            },
+        getId: (ProductOrder object) => object.id,
+        setId: (ProductOrder object, int id) {
+          object.id = id;
+        },
+        objectToFB: (ProductOrder object, fb.Builder fbb) {
+          final statusOffset = fbb.writeString(object.status);
+          final customerNameOffset = fbb.writeString(object.customerName);
+          final customerContactOffset = fbb.writeString(object.customerContact);
+          fbb.startTable(5);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, statusOffset);
+          fbb.addOffset(2, customerNameOffset);
+          fbb.addOffset(3, customerContactOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final customerNameParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, '');
+          final customerContactParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 10, '');
+          final object = ProductOrder(customerNameParam, customerContactParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..status = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 6, '');
+          obx_int.InternalToManyAccess.setRelInfo<ProductOrder>(
+              object.orderItems,
+              store,
+              obx_int.RelInfo<OrderItem>.toOneBacklink(
+                  2, object.id, (OrderItem srcObject) => srcObject.order));
+          return object;
         })
   };
 
@@ -181,4 +340,54 @@ class Product_ {
   /// See [Product.image].
   static final image =
       obx.QueryStringProperty<Product>(_entities[0].properties[5]);
+}
+
+/// [OrderItem] entity fields to define ObjectBox queries.
+class OrderItem_ {
+  /// See [OrderItem.id].
+  static final id =
+      obx.QueryIntegerProperty<OrderItem>(_entities[1].properties[0]);
+
+  /// See [OrderItem.order].
+  static final order = obx.QueryRelationToOne<OrderItem, ProductOrder>(
+      _entities[1].properties[1]);
+
+  /// See [OrderItem.productId].
+  static final productId =
+      obx.QueryIntegerProperty<OrderItem>(_entities[1].properties[2]);
+
+  /// See [OrderItem.qty].
+  static final qty =
+      obx.QueryIntegerProperty<OrderItem>(_entities[1].properties[3]);
+
+  /// See [OrderItem.price].
+  static final price =
+      obx.QueryIntegerProperty<OrderItem>(_entities[1].properties[4]);
+
+  /// See [OrderItem.productName].
+  static final productName =
+      obx.QueryStringProperty<OrderItem>(_entities[1].properties[5]);
+}
+
+/// [ProductOrder] entity fields to define ObjectBox queries.
+class ProductOrder_ {
+  /// See [ProductOrder.id].
+  static final id =
+      obx.QueryIntegerProperty<ProductOrder>(_entities[2].properties[0]);
+
+  /// See [ProductOrder.status].
+  static final status =
+      obx.QueryStringProperty<ProductOrder>(_entities[2].properties[1]);
+
+  /// See [ProductOrder.customerName].
+  static final customerName =
+      obx.QueryStringProperty<ProductOrder>(_entities[2].properties[2]);
+
+  /// See [ProductOrder.customerContact].
+  static final customerContact =
+      obx.QueryStringProperty<ProductOrder>(_entities[2].properties[3]);
+
+  /// see [ProductOrder.orderItems]
+  static final orderItems =
+      obx.QueryBacklinkToMany<OrderItem, ProductOrder>(OrderItem_.order);
 }

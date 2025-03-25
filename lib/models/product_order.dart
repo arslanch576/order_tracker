@@ -3,17 +3,17 @@ import 'package:order_tracker/models/order_item.dart';
 import 'package:order_tracker/models/product.dart';
 
 @Entity()
-class Order {
+class ProductOrder {
   @Id()
-  int id;
-  String status;
+  int id=0;
+  String status="Pending";
   String customerName;
   String customerContact;
 
   @Backlink('order')
   ToMany<OrderItem> orderItems=ToMany<OrderItem>();
 
-  Order(this.id, this.status, this.customerName, this.customerContact);
+  ProductOrder( this.customerName, this.customerContact);
   
   int getTotal(){
     return orderItems.fold<int>(0, (previousValue, element) => previousValue+element.price);

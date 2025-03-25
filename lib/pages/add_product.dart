@@ -4,15 +4,25 @@ import 'package:order_tracker/main.dart';
 import '../models/product.dart';
 
 class AddProduct extends StatefulWidget {
-  const AddProduct({super.key});
+  Product? product;
+
+  AddProduct({super.key, this.product});
 
   @override
-  State<AddProduct> createState() => _AddProductState();
+  State<AddProduct> createState() => _AddProductState(p: product);
 }
 
 class _AddProductState extends State<AddProduct> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
+  Product? p;
+  late TextEditingController nameController;
+  late TextEditingController priceController;
+
+  _AddProductState({this.p}) {
+    nameController = TextEditingController(text: p == null ? "" : p!.name);
+    priceController =
+        TextEditingController(text: p == null ? "" : p!.price.toString());
+  }
+
   String? nameError;
   String? priceError;
 
@@ -36,10 +46,15 @@ class _AddProductState extends State<AddProduct> {
       });
       return;
     }
-
-    Product product = Product(0,name, int.parse(price), "Regular", "Burgers", "image");
-    objectBoxDatabase.productBox.put(product);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product saved")));
+    if (p == null)
+      p = Product(0, name, int.parse(price), "Regular", "Burgers", "image");
+    else {
+      p!.name = name;
+      p!.price = int.parse(price);
+    }
+    objectBoxDatabase.productBox.put(p!);
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Product saved")));
     Navigator.of(context).pop();
   }
 
@@ -47,7 +62,7 @@ class _AddProductState extends State<AddProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add product"),
+        title: Text(p==null?"Add product":"Update product"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

@@ -41,10 +41,81 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "2:4776952950019088891",
+      "lastPropertyId": "6:5588386441855497874",
+      "name": "OrderItem",
+      "properties": [
+        {
+          "id": "1:3856492699875631792",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1657361306181674346",
+          "name": "orderId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:8537041239604181203",
+          "relationTarget": "ProductOrder"
+        },
+        {
+          "id": "3:511681790319170257",
+          "name": "productId",
+          "type": 6
+        },
+        {
+          "id": "4:1878026907179102898",
+          "name": "qty",
+          "type": 6
+        },
+        {
+          "id": "5:7055723553385492284",
+          "name": "price",
+          "type": 6
+        },
+        {
+          "id": "6:5588386441855497874",
+          "name": "productName",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:7370653352271473756",
+      "lastPropertyId": "4:2727038881326554175",
+      "name": "ProductOrder",
+      "properties": [
+        {
+          "id": "1:5555044973357186739",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8866396211287913659",
+          "name": "status",
+          "type": 9
+        },
+        {
+          "id": "3:8967070820697213956",
+          "name": "customerName",
+          "type": 9
+        },
+        {
+          "id": "4:2727038881326554175",
+          "name": "customerContact",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "1:51015842298173998",
-  "lastIndexId": "0:0",
+  "lastEntityId": "3:7370653352271473756",
+  "lastIndexId": "1:8537041239604181203",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
